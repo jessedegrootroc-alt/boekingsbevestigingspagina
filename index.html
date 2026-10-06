@@ -1,0 +1,1912 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Je boeking is bevestigd · ViaLuxury</title>
+<meta name="description" content="Bevestiging van je boeking bij Hotel Winselerhof, Valkenburg aan de Geul.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#141414">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   ViaLuxury — boekingsbevestiging
+   Gebouwd op STYLEGUIDE.md. Eén bestand, geen build, geen dependencies.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Fonts ─────────────────────────────────────────────────────────────── */
+@font-face { font-family: 'Recoleta'; src: url('public/fonts/recoleta/Recoleta-Regular.ttf')  format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Recoleta'; src: url('public/fonts/recoleta/Recoleta-Medium.ttf')   format('truetype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Recoleta'; src: url('public/fonts/recoleta/Recoleta-SemiBold.ttf') format('truetype'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Recoleta'; src: url('public/fonts/recoleta/Recoleta-Bold.ttf')     format('truetype'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Basis Grotesque'; src: url('public/fonts/basis-grotesque/basisgrotesque-regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Basis Grotesque'; src: url('public/fonts/basis-grotesque/basisgrotesque-medium.ttf')  format('truetype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Basis Grotesque'; src: url('public/fonts/basis-grotesque/basisgrotesque-bold.ttf')    format('truetype'); font-weight: 700; font-display: swap; }
+
+/* ── Tokens ────────────────────────────────────────────────────────────── */
+:root {
+  /* Colour */
+  --color-primary:              #FB862C;
+  --color-primary-hover:        #EE7126;
+  --color-primary-light:        #F5F5F5;
+  --color-discount:             #27C88D;
+  --color-discount-light:       #E8F5E9;
+  --color-review:               #27C88D;
+  --color-text-primary:         #141414;
+  --color-text-secondary:       #555555;
+  --color-text-muted:           #999999;
+  --color-text-link:            #4A4A4A;
+  --color-background:           #FFFFFF;
+  --color-background-secondary: #FBFAF8;
+  --color-surface:              #FFFFFF;
+  --color-dark:                 #141414;
+  --color-border:               #E5E5E5;
+  --color-border-light:         #F0F0F0;
+  --color-border-warm:          #E5E2DA;
+  --color-star:                 #FB862C;
+  --color-error:                #D32F2F;
+
+  /* Type */
+  --font-heading: 'Recoleta', 'Playfair Display', Georgia, serif;
+  --font-body:    'Basis Grotesque', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-accent:  'Oooh Baby', cursive;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-lg: 6px;
+  --shadow-sm:      0 1px 3px  rgba(0, 0, 0, 0.06);
+  --shadow-card:    0 2px 8px  rgba(0, 0, 0, 0.08);
+  --shadow-sidebar: 0 4px 16px rgba(0, 0, 0, 0.10);
+  --shadow-hover:   0 4px 12px rgba(0, 0, 0, 0.12);
+
+  /* Space */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --section-pad:   clamp(48px, 6vw, 76px);
+  --container-max: 1137px;
+
+  /* Motion */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  margin: 0;
+}
+
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img { max-width: 100%; display: block; }
+/* Het hidden-attribuut staat alleen in de UA-stylesheet en verliest daarmee van
+   elke auteursregel met display: img hierboven, .timer verderop. Als
+   auteursregel zou het nog steeds gelijkspelen met .timer, vandaar important. */
+[hidden] { display: none !important; }
+
+a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-fast); }
+a:hover { color: var(--color-primary); }
+
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute; left: var(--space-md); top: -60px; z-index: 50;
+  padding: 10px var(--space-md);
+  background: var(--color-surface); color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  transition: top var(--transition-fast);
+}
+.skip-link:focus { top: var(--space-md); }
+
+/* ── Layout ────────────────────────────────────────────────────────────── */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+/* [INFERRED] Leeskolom voor lopende tekst. 760px is de breedte van de
+   gecentreerde section head in de referentie (§12.5). Alleen voor koppen en
+   losse tekstblokken, niet voor de kaartrasters. */
+.doc { max-width: 760px; margin: 0 auto; }
+
+
+.section { padding: var(--section-pad) 0; background: var(--color-background); }
+
+.section-kicker {
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+.section-title { font-size: clamp(32px, 4vw, 44px); line-height: 1.1; letter-spacing: -0.88px; }
+.section-intro {
+  margin-top: var(--space-md);
+  max-width: 560px;
+  font-size: 18px;
+  color: var(--color-text-secondary);
+}
+.section-head { margin-bottom: var(--space-2xl); }
+.section-head--center { text-align: center; max-width: 760px; margin-left: auto; margin-right: auto; }
+.section-head--center .section-intro { margin-left: auto; margin-right: auto; }
+
+.section-cta { margin-top: var(--space-2xl); text-align: center; }
+.section-cta-note {
+  display: block; margin-top: var(--space-sm);
+  font-size: 14px; color: var(--color-text-muted);
+}
+.section-cta-note--light { color: rgba(255, 255, 255, 0.5); }
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-sm);
+  padding: 10px var(--space-lg);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-weight: 600; font-size: 16px; line-height: 1.4;
+  border: none; cursor: pointer; text-decoration: none;
+  transition: all var(--transition-fast);
+}
+.btn-primary   { background: var(--color-primary); color: #fff; }
+.btn-primary:hover { background: var(--color-primary-hover); color: #fff; }
+.btn-secondary {
+  background: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+.btn-secondary:hover { background: var(--color-border-light); color: var(--color-text-primary); }
+.btn-ghost-light {
+  background: transparent; color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.btn-ghost-light:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); color: #fff; }
+.btn-lg { padding: 14px var(--space-xl); font-size: 17px; }
+.btn-block { width: 100%; }
+
+/* Toegevoegd-status: kleur en label wisselen, de knop blijft staan waar hij staat. */
+.btn.is-added { background: var(--color-background-secondary); border-color: var(--color-border-warm); }
+.btn .btn__plus  { display: block; }
+.btn .btn__check { display: none; color: var(--color-discount); }
+.btn.is-added .btn__plus  { display: none; }
+.btn.is-added .btn__check { display: block; }
+
+/* ── Icons ─────────────────────────────────────────────────────────────── */
+.ico { display: block; flex-shrink: 0; }
+
+/* Vierkante tegel met warme rand (§6.7), twee maten. */
+.badge {
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-warm);
+  color: var(--color-dark);
+  flex-shrink: 0;
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  /* [INFERRED] De hero draagt nu de foto, niet alleen tekst. Met enkel
+     --section-pad was de kaderhoogte gelijk aan de tekst en viel de foto voor
+     ruim de helft buiten beeld. min-height geeft het beeld ruimte; de bovengrens
+     houdt de bevestiging zelf boven de vouw op een korte laptop. */
+  min-height: clamp(340px, 56vh, 520px);
+  display: flex;
+  align-items: flex-end;
+  /* De fotolaag hieronder steekt 12px buiten de hero. Zonder deze clip komt die
+     rand onder de scrim uit en zie je een lichte strook langs de onderkant. */
+  overflow: hidden;
+  background: var(--color-dark);
+  color: #fff;
+  padding: var(--section-pad) 0;
+}
+/* De foto staat in een eigen laag, niet op .hero zelf, zodat de blur hieronder
+   alleen het beeld raakt en niet de scrim of de tekst. */
+.hero::after {
+  content: '';
+  position: absolute;
+  /* Overmaat: een blur vervaagt ook de randen van zijn eigen laag. */
+  inset: -12px;
+  background: url('assets/img/hotel-winselerhof.jpg') center / cover no-repeat;
+  z-index: 0;
+  pointer-events: none;
+}
+/* Het bronbestand is 516x290. Vanaf ongeveer 900px venster wordt dat over de
+   volle breedte uitgerekt en worden de pixelblokken zichtbaar. Een lichte blur
+   maakt van die blokken een zachte achtergrond in plaats van een kapot beeld.
+   Dit is een pleister: de echte oplossing is een origineel van 2880px of meer. */
+@media (min-width: 900px)  { .hero::after { filter: blur(1.5px); } }
+@media (min-width: 1300px) { .hero::after { filter: blur(3px); } }
+@media (min-width: 1700px) { .hero::after { filter: blur(5px); } }
+
+/* Scrim over de foto. Waarden zoals opgegeven: #141414 van 20% naar 80%. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.20) 0%, rgba(20, 20, 20, 0.80) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+.hero > .container { position: relative; z-index: 2; width: 100%; }
+.hero__kicker {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase;
+  /* Wijkt af van de 0.45 uit de opacity-ladder (§2.2). Die waarde geldt voor
+     een vlakke donkere ondergrond, niet voor een foto onder een scrim. Voluit
+     wit houdt de bevestigingsregel leesbaar waar de foto ook licht uitvalt. */
+  color: #fff;
+  margin-bottom: var(--space-md);
+}
+.hero__kicker .ico { color: var(--color-discount); }
+.hero__title {
+  font-size: clamp(32px, 4.6vw, 60px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -2.2px;
+  max-width: 22ch;
+  color: #fff;
+}
+.hero__title em { font-style: normal; font-weight: 600; }
+.hero__sub {
+  margin-top: var(--space-md);
+  max-width: 560px;
+  font-size: clamp(15px, 1.4vw, 17px);
+  color: rgba(255, 255, 255, 0.75);
+}
+.hero__sub strong { color: #fff; font-weight: 600; }
+.hero__sub a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.hero__sub a:hover { color: var(--color-primary); }
+
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero__kicker { animation: heroFade 900ms ease 150ms both; }
+.hero__title  { animation: heroFade 900ms ease 250ms both; }
+.hero__sub    { animation: heroFade 900ms ease 450ms both; }
+
+/* ── Card ──────────────────────────────────────────────────────────────── */
+.card {
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-lg);
+  transition: box-shadow var(--transition-fast);
+}
+.card__title { font-size: 20px; }
+.card__eyebrow {
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+/* Fotoband boven in een kaart (§7, .include-card__photo). De wrapper houdt de
+   verhouding vast, zodat een ontbrekende foto een rustig warm vlak achterlaat. */
+.media {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-warm);
+}
+.media img { width: 100%; height: 100%; object-fit: cover; }
+.media--16x9 { aspect-ratio: 16 / 9; }
+.media--4x3  { aspect-ratio: 4 / 3; }
+.media--3x2  { aspect-ratio: 3 / 2; }
+
+/* Beeldplek zonder foto. Krijgt bewust een icoon in het midden, zodat het
+   leest als een plek waar een foto komt en niet als een kapot beeld. */
+.media > .ico { display: none; }
+.media--leeg { display: grid; place-items: center; }
+.media--leeg > .ico { display: block; width: 26px; height: 26px; opacity: 0.3; }
+
+.booking__hotel { font-size: clamp(22px, 2.5vw, 28px); }
+.booking__ref { margin-top: var(--space-xs); font-size: 13px; color: var(--color-text-muted); }
+
+/* Rijen met haarlijn ertussen (§6.9): nooit boven de eerste of onder de laatste. */
+.rows { margin-top: var(--space-md); }
+.rows li {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: var(--space-sm) 0;
+}
+.rows li:first-child { padding-top: 0; }
+.rows li + li { border-top: 1px solid var(--color-border-light); }
+.rows__title { font-size: 15px; font-weight: 500; line-height: 1.3; }
+.rows__meta  { font-size: 13px; color: var(--color-text-secondary); line-height: 1.4; }
+.rows--start li { align-items: flex-start; }
+
+.rule { border: none; border-top: 1px solid var(--color-border-light); margin: var(--space-lg) 0 0; }
+.rule + * { padding-top: var(--space-lg); }
+
+.included { display: grid; gap: var(--space-sm); margin-top: var(--space-md); }
+.included li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 15px; color: var(--color-text-secondary);
+}
+.included .ico { color: var(--color-discount); margin-top: 3px; }
+
+.paid { margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--color-border-light); }
+.paid__amount { font-family: var(--font-heading); font-weight: 600; font-size: 20px; line-height: 1.3; }
+.paid p + p { margin-top: var(--space-xs); }
+.paid__note { font-size: 15px; color: var(--color-text-secondary); max-width: 52ch; }
+.paid__note:first-of-type { margin-top: var(--space-sm); }
+
+.card__actions { margin-top: var(--space-lg); }
+
+/* ── Panelen (agenda / wensen) ─────────────────────────────────────────── */
+/* [INFERRED] Vlak met warme rand, afgeleid van .usp__icon (§6.7): dezelfde
+   achtergrond en rand, opgeschaald naar een blok in plaats van een tegel. */
+.panels { display: grid; gap: var(--space-md); margin-top: var(--space-lg); }
+.panel {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-warm);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+.panel h3 { font-family: var(--font-body); font-size: 15px; font-weight: 500; }
+.panel p  { margin-top: var(--space-sm); font-size: 15px; color: var(--color-text-secondary); max-width: 44ch; }
+
+.block { margin-top: var(--space-lg); }
+.block h3 { font-size: 18px; }
+.block p  { margin-top: var(--space-sm); font-size: 15px; color: var(--color-text-secondary); max-width: 52ch; }
+
+.link-text {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+  padding: 0; border: none; background: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 15px; font-weight: 500;
+  color: var(--color-text-link);
+  text-decoration: underline; text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+.link-text:hover { color: var(--color-primary); }
+.link-text .ico { color: inherit; }
+.link-text--tight { margin-top: var(--space-sm); }
+/* Onder een kaartrij heeft de slotlink meer lucht nodig dan onder een alinea. */
+.card-row + .link-text { margin-top: var(--space-lg); }
+.act-foot {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+.act-foot .link-text { margin-top: 0; }
+.act-foot__bron { font-size: 13px; color: var(--color-text-muted); }
+
+/* ── Upsell: kop en deadlines ──────────────────────────────────────────── */
+.offers__deadline {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  font-size: 16px; color: var(--color-text-secondary);
+}
+.offers__note {
+  margin-top: var(--space-sm);
+  font-size: 14px; color: var(--color-text-muted);
+}
+.timer {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+  padding: 8px var(--space-md);
+  /* [INFERRED] Pilvorm van .reach__country (§6.12), donker gevuld omdat het
+     een aflopende teller is en geen label. */
+  border-radius: 999px;
+  background: var(--color-dark);
+  color: #fff;
+  font-size: 14px; font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.timer.is-expired { background: var(--color-text-muted); }
+
+/* Klok die op mobiel meeloopt zodra de sectie in beeld is, niet eerder. */
+.sticky-timer {
+  position: fixed; z-index: 40;
+  left: var(--space-md); right: var(--space-md); bottom: var(--space-md);
+  display: none; align-items: center; justify-content: center; gap: var(--space-sm);
+  padding: 10px var(--space-md);
+  border-radius: 999px;
+  background: var(--color-dark); color: #fff;
+  box-shadow: var(--shadow-sidebar);
+  font-size: 14px; font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  opacity: 0; transition: opacity var(--transition-base);
+}
+
+/* ── Pijlers ───────────────────────────────────────────────────────────── */
+.pillars { display: grid; gap: var(--space-md); }
+.pillar {
+  /* Meet met de kaart, niet met het venster: de pijlers zijn op desktop
+     smaller dan de viewport. */
+  container-type: inline-size;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-lg);
+}
+/* De kop staat alleen, zonder categorielabel erboven. Daarom centreren tegen
+   het icoonvierkant van 36px in plaats van uitlijnen op de bovenkant. */
+.pillar__head { display: flex; align-items: center; gap: var(--space-md); }
+.pillar__head h3 { font-size: 20px; }
+.pillar__text {
+  margin-top: var(--space-md);
+  font-size: 15px; color: var(--color-text-secondary); max-width: 60ch;
+}
+.pillar__foot {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+/* Wel en niet gedekt naast elkaar zodra de kaart breed genoeg is. Gemeten met
+   de kaart, niet met het venster. */
+@container (min-width: 560px) {
+  .cover { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Extra's als rij (§6.9 haarlijnen) ─────────────────────────────────── */
+.extras { margin-top: var(--space-md); }
+.extra {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+}
+.extra:first-child { padding-top: var(--space-sm); }
+.extra + .extra { border-top: 1px solid var(--color-border-light); }
+.extra__body { flex: 1 1 24ch; min-width: 0; }
+.extra__title { font-size: 15px; font-weight: 500; line-height: 1.3; }
+.extra__meta { margin-top: 2px; font-size: 14px; color: var(--color-text-secondary); }
+.extra__foot { display: flex; align-items: center; gap: var(--space-md); }
+
+.price { display: flex; align-items: baseline; gap: 10px; }
+.price__was { font-size: 15px; color: var(--color-text-muted); }
+.price__now { font-family: var(--font-heading); font-weight: 600; font-size: 24px; line-height: 1; }
+.price__free { font-size: 15px; font-weight: 500; color: var(--color-text-secondary); }
+.extra .price__now, .poi .price__now { font-size: 18px; }
+
+/* Kortingsbadge. Staat er alleen zolang de doorgestreepte prijs klopt: dat is
+   de normale prijs die na afloop van de deadline weer geldt. Verdwijnt samen
+   met die prijs, zie de JS. */
+.badge-off {
+  display: inline-block;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: var(--color-discount-light);
+  color: var(--color-text-primary);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+}
+
+.note-ref {
+  margin-top: var(--space-md);
+  font-size: 13px; color: var(--color-text-muted); max-width: 66ch;
+}
+
+/* ── Kaartrij: activiteiten en de extra's in de pijler Genot ───────────── */
+/* auto-fit, want de pijler Genot toont soms twee kaarten en soms drie. */
+.card-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+.poi { display: flex; flex-direction: column; }
+.poi .media { margin-bottom: var(--space-sm); }
+/* Naam in de bodyfont: dit zijn rijen in een kaart, geen koppen van secties. */
+.poi__name { font-family: var(--font-body); font-size: 16px; font-weight: 500; }
+.poi__meta { margin-top: 2px; font-size: 13px; color: var(--color-text-muted); }
+.poi__why  { margin-top: var(--space-sm); font-size: 14px; color: var(--color-text-secondary); }
+.poi__tip {
+  margin-top: var(--space-sm);
+  padding-left: var(--space-md);
+  border-left: 1px solid var(--color-border-warm);
+  font-size: 14px; color: var(--color-text-secondary);
+}
+.poi__tip b { font-weight: 500; color: var(--color-text-primary); }
+.poi__foot {
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: var(--space-sm);
+  margin-top: auto; padding-top: var(--space-md);
+}
+.poi__foot .price { justify-content: flex-start; }
+
+/* Pijler zonder eigen kader. Waar de inhoud zelf al uit kaarten bestaat, is een
+   kader eromheen een kaart in een kaart: twee lijnen die hetzelfde afbakenen. */
+.pillar--open {
+  background: none;
+  border: none;
+  box-shadow: none;
+  /* De padding blijft staan: alleen de lijn verdwijnt, de kop blijft op één
+     lijn met die van de andere pijlers. */
+}
+
+/* ── Activiteiten: drie gelijkwaardige kaarten ─────────────────────────── */
+/* Opzet naar het voorbeeld van een boekingsplatform: label, beeld, titel,
+   sociaal bewijs, twee eigenschapsregels, prijs. Wat we niet kunnen leveren
+   staat er niet in: geen favorietenhartje, geen taalkeuze, geen productlabels
+   als "privé en luxe". De twee eigenschapsregels tonen juist wat ViaLuxury wél
+   weet en een platform niet: reistijd vanaf dít hotel, en of het open is op de
+   datum van déze gast. */
+.act-row {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+.poi--card {
+  display: flex; flex-direction: column;
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: box-shadow var(--transition-fast);
+}
+.poi--card:hover { box-shadow: var(--shadow-hover); }
+.poi__label {
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+.poi--card .poi__name { margin-top: var(--space-md); font-size: 17px; line-height: 1.35; }
+/* Twee regels ruimte voor de titel, ook als er maar één nodig is. Zonder dit
+   schuiven het sociale bewijs en de eigenschappen per kaart een regel op en
+   loopt de rij scheef. */
+@media (min-width: 760px) { .poi--card .poi__name { min-height: 2.7em; } }
+
+/* Sociaal bewijs. De bolletjes gebruiken --color-review, de token die de
+   styleguide daar al voor heeft, niet het oranje accent. */
+.proof {
+  display: flex; align-items: center; gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  font-size: 14px; color: var(--color-text-secondary);
+}
+.proof__score { font-weight: 600; color: var(--color-text-primary); }
+.proof__dots  { color: var(--color-review); flex-shrink: 0; }
+.proof__count { color: var(--color-text-muted); }
+.proof .ico   { color: var(--color-text-muted); flex-shrink: 0; }
+
+/* Twee regels met wat wij weten en een platform niet. */
+.poi__attrs { display: grid; gap: 6px; margin-top: var(--space-md); }
+.poi__attrs li {
+  display: flex; align-items: flex-start; gap: var(--space-sm);
+  font-size: 14px; color: var(--color-text-secondary);
+}
+.poi__attrs .ico { color: var(--color-text-muted); margin-top: 2px; flex-shrink: 0; }
+
+/* De eenheid hoort bij de prijs maar mag hem niet overstemmen: bodyfont en
+   normale grootte naast het serif-bedrag. */
+.price__eenheid { font-family: var(--font-body); font-size: 14px; font-weight: 400; color: var(--color-text-secondary); }
+
+/* ── Zekerheid: het blok moet rustig en solide ogen ────────────────────── */
+/* Warme vulling in plaats van wit, zoals .panel: dat leest als een vastgelegde
+   afspraak en niet als weer een aanbieding. */
+.pillar--safe {
+  background: var(--color-background-secondary);
+  border-color: var(--color-border-warm);
+}
+.pillar--safe .badge {
+  background: var(--color-discount-light);
+  border-color: var(--color-discount-light);
+}
+.pillar__bedrag { font-family: var(--font-heading); font-weight: 600; }
+
+/* Wat wel en wat niet gedekt is, naast elkaar en allebei zichtbaar. De
+   uitsluitingen tonen wekt meer vertrouwen dan ze wegstoppen. */
+.cover { display: grid; gap: var(--space-lg); margin-top: var(--space-lg); }
+.cover__kop {
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+.cover__list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 5px 0;
+  font-size: 15px; color: var(--color-text-secondary);
+}
+.cover__list .ico { margin-top: 3px; flex-shrink: 0; }
+.cover__list--ja  .ico { color: var(--color-discount); }
+.cover__list--nee .ico { color: var(--color-text-muted); }
+
+/* Twee gelijkwaardige keuzes, geen van beide voorgeselecteerd. Dat is een eis
+   uit de IDD en het is tegelijk het sterkste vertrouwenssignaal: de gast mag
+   zichtbaar nee zeggen. */
+.choice { display: grid; gap: var(--space-sm); margin: var(--space-lg) 0 0; padding: 0; border: none; }
+.choice__opt {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-md);
+  align-items: start;
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+.choice__opt:hover { border-color: var(--color-text-muted); }
+.choice__opt.is-chosen { border-color: var(--color-dark); }
+.choice__opt input { margin: 3px 0 0; width: 18px; height: 18px; accent-color: var(--color-dark); }
+.choice__titel { display: block; font-size: 15px; font-weight: 500; }
+.choice__meta  { display: block; margin-top: 2px; font-size: 14px; color: var(--color-text-secondary); }
+.choice__status { margin-top: var(--space-md); font-size: 14px; color: var(--color-text-secondary); }
+.choice__status:empty { margin-top: 0; }
+
+.pillar__fine { margin-top: var(--space-md); font-size: 13px; color: var(--color-text-muted); max-width: 72ch; }
+.pillar__fine a { color: var(--color-text-link); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── CTA ───────────────────────────────────────────────────────────────── */
+.cta { background: var(--color-dark); color: #fff; padding: var(--section-pad) 0; overflow: hidden; }
+.cta__head { text-align: center; margin-bottom: var(--space-2xl); }
+.cta__head .section-kicker { color: rgba(255, 255, 255, 0.45); }
+.cta__title { font-size: clamp(36px, 5vw, 56px); line-height: 1.05; letter-spacing: -1.2px; color: #fff; }
+.cta__sub {
+  margin: var(--space-md) auto 0; max-width: 560px;
+  font-size: 18px; color: rgba(255, 255, 255, 0.75);
+}
+.cta__card {
+  max-width: 520px; margin: 0 auto;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sidebar);
+  padding: clamp(24px, 3vw, 40px);
+}
+.cta__card-title { font-size: 26px; letter-spacing: -0.5px; }
+.cta__card-sub { margin-top: var(--space-sm); font-size: 15px; color: var(--color-text-secondary); }
+
+/* ── Form ──────────────────────────────────────────────────────────────── */
+.form { display: flex; flex-direction: column; gap: var(--space-md); margin-top: var(--space-lg); }
+.form.is-hidden { display: none; }
+.form__field { display: flex; flex-direction: column; gap: 6px; }
+.form__field label { font-size: 14px; font-weight: 500; }
+.form__field input {
+  font-family: var(--font-body); font-size: 15px;
+  padding: 11px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: #fff; width: 100%;
+  transition: border-color var(--transition-fast);
+}
+.form__field input::placeholder { color: var(--color-text-muted); }
+.form__field input:focus { outline: none; border-color: var(--color-dark); }
+.form__field input:invalid:not(:placeholder-shown) { border-color: var(--color-error); }
+.form__error { display: none; font-size: 13px; color: var(--color-error); }
+.form__field.has-error .form__error { display: block; }
+.form__note { font-size: 13px; color: var(--color-text-muted); }
+
+.form__success { display: none; text-align: center; padding: var(--space-xl) 0 var(--space-md); }
+.form__success.is-visible { display: block; }
+.form__success-icon {
+  width: 56px; height: 56px; margin: 0 auto var(--space-md);
+  border-radius: 50%;
+  background: var(--color-discount-light);
+  color: var(--color-discount);
+  display: flex; align-items: center; justify-content: center;
+}
+.form__success-title { font-size: 24px; }
+.form__success-text { margin-top: var(--space-sm); font-size: 15px; color: var(--color-text-secondary); }
+.form__success-text strong { color: var(--color-text-primary); font-weight: 500; }
+.cta__card.is-verzonden .cta__card-title,
+.cta__card.is-verzonden .cta__card-sub { display: none; }
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+.footer {
+  background: var(--color-dark);
+  color: rgba(255, 255, 255, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-xl) 0;
+  font-size: 14px;
+}
+.footer__inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-md);
+}
+.footer__logo { font-size: 18px; font-weight: 600; color: #fff; }
+.footer a { color: rgba(255, 255, 255, 0.55); }
+.footer a:hover { color: var(--color-primary); }
+
+/* ── Reveal ────────────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms ease, transform 600ms ease;
+  transition-delay: var(--d, 0ms);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* ═══ Breakpoints ═══════════════════════════════════════════════════════ */
+
+
+/* Twee kolommen zodra de KAART breed genoeg is, niet het venster. Beide
+   kaarten staan op desktop naast elkaar en zijn dan smaller dan het venster. */
+@container (min-width: 420px) {
+  .panels { grid-template-columns: 1fr 1fr; }
+  .included { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); column-gap: var(--space-lg); }
+}
+
+
+/* Elke sectie sluit af met een actie over de volle breedte (§13.8). */
+@media (max-width: 768px) {
+  .card__actions .btn,
+  .section-cta .btn { width: 100%; }
+  .hero__title { letter-spacing: -1.6px; }
+
+  /* Kaartrijen horizontaal scrollbaar. De negatieve marge laat de rij tot de
+     rand van de pijler lopen, zodat zichtbaar is dat er meer staat. */
+  .card-row, .act-row {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 78%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--space-lg) * -1);
+    padding-inline: var(--space-lg);
+    scrollbar-width: thin;
+  }
+  .poi { scroll-snap-align: start; }
+
+  .sticky-timer.is-on { display: flex; opacity: 1; }
+  /* De meeloopklok zweeft boven de pagina, dus de pagina moet er onderlangs
+     nog voorbij kunnen scrollen. Anders dekt hij de laatste rij af. */
+  body.has-sticky-timer { padding-bottom: 64px; }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hero__kicker, .hero__title, .hero__sub { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  .offers, .cta, .footer, .btn { display: none !important; }
+  .hero { background: #fff; color: var(--color-text-primary); min-height: 0; display: block; }
+  .hero::before, .hero::after { display: none; }
+  .hero__title, .hero__sub { color: var(--color-text-primary); }
+  .card { box-shadow: none; break-inside: avoid; }
+}
+</style>
+<noscript><style>.reveal { opacity: 1; transform: none; }</style></noscript>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Naar hoofdinhoud</a>
+
+<!-- ══ Hero ═══════════════════════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="container"><div class="doc">
+    <p class="hero__kicker">
+      <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+      Bevestigd
+    </p>
+    <h1 class="hero__title">Je boeking naar <em>Hotel Winselerhof</em> is bevestigd</h1>
+    <p class="hero__sub">
+      Je bevestiging is verstuurd naar <strong>john.doe@vialuxury.com</strong>. Niet ontvangen binnen 15 minuten? Check je spamfolder of <a href="#contact">neem contact op</a>.
+    </p>
+  </div></div>
+</header>
+
+<main id="main">
+
+  <!-- ══ Je boeking ══════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container"><div class="doc">
+      <article class="card reveal" aria-labelledby="booking-title">
+        <p class="card__eyebrow">Je boeking</p>
+        <h2 id="booking-title" class="booking__hotel">Hotel Winselerhof, Valkenburg aan de Geul</h2>
+        <p class="booking__ref">Boekingsnummer: 98754123</p>
+
+        <ul class="rows">
+          <li>
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.75 2.75v-2M12.25 2.75v-2"/><rect x="2.25" y="2.75" width="13.5" height="12.5" rx="2" ry="2"/><path d="M2.25 6.25h13.5"/></svg>
+            </span>
+            <span class="rows__title">ma 29 – wo 31 december 2025</span>
+          </li>
+          <li>
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M2 18h20"/><path d="M22 13v-3a3 3 0 0 0-3-3h-7v6" stroke-linecap="butt"/><path d="M2 13h20"/><path d="M2 5v15"/><path d="M22 13v7"/><path d="M7 10a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" fill="currentColor"/></svg>
+            </span>
+            <span class="rows__title">2 nachten • 2 personen • Deluxe kamer</span>
+          </li>
+          <li>
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 15"/></svg>
+            </span>
+            <span class="rows__title">Check-in vanaf 15:00 · Check-out vóór 11:00</span>
+          </li>
+        </ul>
+
+        <hr class="rule">
+        <div>
+          <h3 class="card__title">Inbegrepen in je arrangement</h3>
+          <ul class="included">
+            <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Ontbijt</span></li>
+            <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Welkomstdrankje</span></li>
+            <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>3-gangendiner in het restaurant van Hotel Winselerhof</span></li>
+            <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Gratis parkeren</span></li>
+            <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Wellnesstoegang</span></li>
+          </ul>
+        </div>
+
+        <div class="paid">
+          <p class="paid__amount">Betaald: €121,50</p>
+          <p class="paid__note">Je hoeft bij aankomst niets meer af te rekenen voor je arrangement.</p>
+          <p class="paid__note">Ter plaatse betaal je nog wel: toeristenbelasting (€2,50 p.p.p.n.).</p>
+        </div>
+
+        <div class="card__actions">
+          <a class="btn btn-primary" href="#booking-details">
+            Bekijk of update details
+            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+    </div></div>
+  </section>
+
+  <!-- ══ Je verblijf regelen ═════════════════════════════════════════════ -->
+  <!--
+    Alles wat hieronder een datum, bedrag of voorraad is, hoort door de backend
+    uit de boeking te komen. Die waarden staan als data-attribuut op de sectie,
+    zodat de JS nooit zelf een deadline of een voorraad verzint.
+
+    data-geboekt + data-voordeel-uren vormen samen de 48-uursdeadline. Die is
+    absoluut: herladen, een nieuwe sessie of een nieuw bezoek kan hem niet
+    resetten, want er wordt hier niets in de browser bewaard.
+
+    LET OP bij livegang: de boekingswaarde (€121,50) ligt onder de drempel van
+    €250 uit data-drempel-verzekering en het arrangement bevat geen
+    niet-restitueerbare onderdelen. Volgens de zichtbaarheidsregel hoort de
+    annuleringsverzekering hier dus niet te staan; bij een premie van €8,50 is
+    de commissie ongeveer €1,50 en dat is de schermruimte niet waard. Hij staat
+    er nu op uitdrukkelijk verzoek. Zet er logica op de drempel voor je live
+    gaat, dan verschijnt het blok alleen waar het iets oplevert.
+
+    Uitgesloten omdat het al in het arrangement zit: ontbijt, welkomstdrankje,
+    3-gangendiner, parkeren en wellnesstoegang.
+  -->
+  <section class="section offers" id="upsell" aria-labelledby="offers-title"
+           data-hotel="Hotel Winselerhof"
+           data-gelegenheid=""
+           data-geboekt="2026-09-02T21:15:00+02:00"
+           data-voordeel-uren="48"
+           data-aankomst="2025-12-29"
+           data-boekingswaarde="121.50"
+           data-drempel-verzekering="250"
+           data-niet-restitueerbaar="nee"
+           data-premie="8,50"
+           data-verzekering-dagen="14">
+    <div class="container">
+
+      <div class="section-head section-head--center reveal">
+        <p class="section-kicker">Tot je aankomst</p>
+        <h2 id="offers-title" class="section-title">Alvast voor je klaargezet</h2>
+        <p class="section-intro">Je kamer staat vast. Dit is wat we verder nog voor je kunnen regelen, zodat je er ter plekke niet meer aan hoeft te denken.</p>
+        <p class="offers__deadline" id="voordeel-regel" hidden>
+          <span id="voordeel-tekst">Je voordeel op extra&#39;s loopt af over</span>
+          <span class="timer" id="timer" role="timer">
+            <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 15"/></svg>
+            <span id="timer-value">--:--:--</span>
+          </span>
+        </p>
+        <p class="offers__note" id="voordeel-datum" hidden></p>
+        <p class="offers__note" id="operationele-regel" hidden></p>
+        <p class="offers__note" id="sfeer-regel" hidden></p>
+      </div>
+
+      <ul class="pillars">
+
+        <!-- ── Blok B: Zekerheid ───────────────────────────────────────── -->
+        <!--
+          Annuleringsverzekering, uitdrukkelijk geen reisverzekering: bij twee
+          nachten in Nederland dekt die laatste vooral dingen die niet spelen.
+
+          Verplicht bij livegang, en alles hieronder is er al op ingericht:
+          afsluiten via een vergunninghoudende partij of als verbonden
+          bemiddelaar; de verzekeringskaart (IPID) zichtbaar vóór het afsluiten;
+          premie, dekking en uitsluitingen leesbaar zonder doorklikken; en geen
+          voorgevinkt vakje, vandaar twee radio's die allebei uit staan.
+
+          De dekkings- en uitsluitingsregels hieronder zijn plaatshouders. Die
+          moeten letterlijk uit de polisvoorwaarden van de partner komen.
+        -->
+        <li class="pillar pillar--safe reveal" style="--d: 0ms">
+          <div class="pillar__head">
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M12 2.5 4.5 5.5V11c0 5 3.2 8.4 7.5 10.5 4.3-2.1 7.5-5.5 7.5-10.5V5.5z"/><path d="M8.75 11.75 11 14l4.25-4.25"/></svg>
+            </span>
+            <div>
+              <h3>Je geld terug als het niet doorgaat</h3>
+            </div>
+          </div>
+          <p class="pillar__text">
+            Je betaalde <span class="pillar__bedrag" id="verzekering-bedrag">€121,50</span> voor dit arrangement.
+            Je boeking is niet restitueerbaar, dus zonder verzekering krijg je daar bij annuleren niets van terug.
+          </p>
+
+          <div class="cover">
+            <div>
+              <p class="cover__kop">Wel gedekt</p>
+              <ul class="cover__list cover__list--ja">
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Ziekte of ongeval, ook van je reisgenoot</span></li>
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Overlijden in de naaste familie</span></li>
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Onvrijwillig ontslag</span></li>
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg><span>Ernstige schade aan je woning</span></li>
+              </ul>
+            </div>
+            <div>
+              <p class="cover__kop">Niet gedekt</p>
+              <ul class="cover__list cover__list--nee">
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Je bent van gedachten veranderd</span></li>
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Een aandoening die je bij het afsluiten al kende</span></li>
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Slecht weer</span></li>
+                <li><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Drukte op het werk of een verzette vergadering</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Eén vinkje, geen expliciete nee-optie: niet aanvinken is het
+               antwoord. Een checkbox en geen radio, want een losse radio kun je
+               na aanvinken niet meer uitzetten. Leeg bij het laden, want
+               voorvinken mag niet onder de IDD. -->
+          <div class="choice">
+            <label class="choice__opt" for="verz-ja">
+              <input type="checkbox" name="verzekering" id="verz-ja" value="ja">
+              <span class="choice__body">
+                <span class="choice__titel">Ja, verzeker mijn annulering voor eenmalig €8,50</span>
+                <span class="choice__meta">Voor jullie samen. Annuleer je om een gedekte reden, dan krijg je <span id="verzekering-bedrag-2">€121,50</span> terug.</span>
+              </span>
+            </label>
+          </div>
+          <p class="choice__status" id="verzekering-status" role="status" aria-live="polite"></p>
+
+          <p class="pillar__fine">
+            Afgesloten bij [partnernaam], AFM-vergunningnummer [nummer]. ViaLuxury treedt op als
+            verbonden bemiddelaar. Lees de <a href="#ipid">verzekeringskaart (IPID)</a> voordat je kiest.
+            <span id="verzekering-deadline"></span>
+          </p>
+        </li>
+
+        <!-- ── Blok C: Activiteiten ────────────────────────────────────── -->
+        <!-- De kop komt uit de vrije dagdelen van het arrangement, niet uit een
+             vaste tekst. Reistijd is vanaf het hotel, niet vanaf het centrum.
+             Alleen POI's die open zijn op de datum van de gast; rond de
+             feestdagen valt daar veel af. Eén van de drie heeft een koopknop:
+             de gratis tips maken de betaalde optie geloofwaardig. Er worden
+             bewust geen externe beoordelingen getoond, alleen de tip van het
+             hotel, zodat er geen licentie van Google of Tripadvisor nodig is. -->
+        <li class="pillar pillar--open reveal" style="--d: 80ms">
+          <div class="pillar__head">
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M12 21.5c4.3-4.6 7-8 7-11.5a7 7 0 1 0-14 0c0 3.5 2.7 6.9 7 11.5z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <div>
+              <h3 id="vrije-tijd-kop">Je hebt dinsdag de hele dag vrij</h3>
+            </div>
+          </div>
+          <p class="pillar__text">Drie ideeën binnen 20 minuten van Hotel Winselerhof, geselecteerd op wat open is op de dag dat je er bent.</p>
+
+          <ul class="act-row">
+
+            <li class="poi poi--card">
+              <p class="poi__label">Direct te boeken</p>
+              <div class="media media--3x2"><img src="assets/img/kasteel-hoensbroek.jpg" width="900" height="600" alt="Kasteel Hoensbroek met torens weerspiegeld in de slotgracht" loading="lazy" onerror="this.remove()"></div>
+              <p class="poi__name">Rondleiding door Kasteel Hoensbroek</p>
+              <!-- Beoordeling van de ticketpartner, niet van Google: die mag je
+                   tonen binnen het partnerprogramma, Google-reviews niet zonder
+                   attributie en live ophalen. Cijfers hier zijn plaatshouders. -->
+              <p class="proof">
+                <span class="proof__score">4,6</span>
+                <svg class="proof__dots" width="70" height="14" viewBox="0 0 70 14" aria-hidden="true"><defs><clipPath id="beoordeling-1"><rect x="0" y="0" width="63.1" height="14"/></clipPath></defs><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5.25"/><circle cx="21" cy="7" r="5.25"/><circle cx="35" cy="7" r="5.25"/><circle cx="49" cy="7" r="5.25"/><circle cx="63" cy="7" r="5.25"/></g><g clip-path="url(#beoordeling-1)" fill="currentColor"><circle cx="7" cy="7" r="6"/><circle cx="21" cy="7" r="6"/><circle cx="35" cy="7" r="6"/><circle cx="49" cy="7" r="6"/><circle cx="63" cy="7" r="6"/></g></svg>
+                <span class="proof__count">(1.284)</span>
+              </p>
+              <ul class="poi__attrs">
+                <li><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M12 21.5c4.3-4.6 7-8 7-11.5a7 7 0 1 0-14 0c0 3.5 2.7 6.9 7 11.5z"/><circle cx="12" cy="10" r="2.5"/></svg><span>14 min met de auto vanaf je hotel</span></li>
+                <li><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 15"/></svg><span>Open op dinsdag 30 december</span></li>
+              </ul>
+              <div class="poi__foot">
+                <span class="price__now">€14,50 <span class="price__eenheid">p.p.</span></span>
+                <button class="btn btn-secondary add" type="button" data-name="Kasteel Hoensbroek" data-price="14,50">
+                  <span class="btn__label">Toevoegen</span>
+                  <svg class="ico btn__plus" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3.25v11.5M3.25 9h11.5"/></svg>
+                  <svg class="ico btn__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+                </button>
+              </div>
+            </li>
+
+            <li class="poi poi--card">
+              <p class="poi__label">Via het hotel</p>
+              <div class="media media--3x2"><img src="assets/img/fietsen-huren.jpg" width="900" height="600" alt="Fiets tegen een boom op een bospad" loading="lazy" onerror="this.remove()"></div>
+              <p class="poi__name">Fietsen huren en het heuvelland in</p>
+              <!-- Sociaal bewijs uit eigen cijfers in plaats van een externe
+                   beoordeling. Dat is licentievrij en niemand anders heeft het. -->
+              <p class="proof"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M20 20v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="3.5"/></svg><span>34 keer geregeld vorige maand</span></p>
+              <ul class="poi__attrs">
+                <li><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M12 21.5c4.3-4.6 7-8 7-11.5a7 7 0 1 0-14 0c0 3.5 2.7 6.9 7 11.5z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Route langs de Brunssummerheide</span></li>
+                <li><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 15"/></svg><span>Ophalen vanaf 09:00</span></li>
+              </ul>
+              <div class="poi__foot">
+                <span class="price__now">€25,00 <span class="price__eenheid">per dag</span></span>
+                <span class="price__free">Reken af bij het hotel</span>
+              </div>
+            </li>
+
+            <li class="poi poi--card">
+              <p class="poi__label">Gratis</p>
+              <div class="media media--3x2"><img src="assets/img/strijthagerbeekdal.jpg" width="900" height="600" alt="Vijver in het Strijthagerbeekdal, omlijst door bomen" loading="lazy" onerror="this.remove()"></div>
+              <p class="poi__name">Wandeling door het Strijthagerbeekdal</p>
+              <p class="proof"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M20 20v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="3.5"/></svg><span>Vaakst gelopen route van gasten</span></p>
+              <ul class="poi__attrs">
+                <li><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M12 21.5c4.3-4.6 7-8 7-11.5a7 7 0 1 0-14 0c0 3.5 2.7 6.9 7 11.5z"/><circle cx="12" cy="10" r="2.5"/></svg><span>4 min lopen vanaf je hotel</span></li>
+                <li><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 15"/></svg><span>Altijd open</span></li>
+              </ul>
+              <div class="poi__foot">
+                <span class="price__free">Geen reservering nodig</span>
+              </div>
+            </li>
+
+          </ul>
+          <div class="act-foot">
+            <a class="link-text" href="#tips">
+              Bekijk alle tips rond Hotel Winselerhof
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <p class="act-foot__bron">Persoonlijk samengesteld door ViaLuxury</p>
+          </div>
+        </li>
+
+        <!-- ── Blok D: Genot ───────────────────────────────────────────── -->
+        <!-- De lijst hieronder is de neutrale standaardselectie en staat in de
+             HTML, zodat hij ook zonder JS gevuld is. De gelegenheidsvraag
+             vervangt hem; zie GENOT in de JS. -->
+        <li class="pillar reveal" style="--d: 160ms">
+          <div class="pillar__head">
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M12 2.5 14.4 9 21 11.5 14.4 14 12 20.5 9.6 14 3 11.5 9.6 9z"/></svg>
+            </span>
+            <div>
+              <h3 id="genot-kop">Maak het bijzonder</h3>
+            </div>
+          </div>
+          <p class="pillar__text" id="genot-intro">Drie extra&#39;s die we voor je klaarzetten op de kamer.</p>
+          <ul class="card-row" id="genot-lijst">
+            <li class="poi">
+              <div class="media media--3x2"><img src="assets/img/drankpakket.jpg" alt="Fles bubbels in een ijsemmer met twee glazen" loading="lazy" onerror="this.remove()"><svg class="ico" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9.5" r="1.5"/></svg></div>
+              <p class="poi__name">Fles wijn of bubbels op de kamer</p>
+              <p class="poi__why">Koud klaargezet voor je aankomst.</p>
+              <div class="poi__foot">
+                <p class="price" data-normaal="39,00" data-voordeel="29,25">
+                  <span class="badge-off">-25%</span>
+                  <span class="price__was"><s>€39,00</s></span>
+                  <span class="price__now">€29,25</span>
+                </p>
+                <button class="btn btn-secondary add" type="button" data-name="Fles wijn of bubbels op de kamer" data-price="29,25">
+                  <span class="btn__label">Toevoegen</span>
+                  <svg class="ico btn__plus" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3.25v11.5M3.25 9h11.5"/></svg>
+                  <svg class="ico btn__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+                </button>
+              </div>
+            </li>
+            <li class="poi">
+              <div class="media media--3x2 media--leeg"><svg class="ico" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9.5" r="1.5"/></svg></div>
+              <p class="poi__name">Kamerupgrade</p>
+              <p class="poi__why">Naar een suite in de historische hoeve, als er een vrij is.</p>
+              <div class="poi__foot">
+                <p class="price" data-normaal="65,00" data-voordeel="49,00">
+                  <span class="badge-off">-25%</span>
+                  <span class="price__was"><s>€65,00</s></span>
+                  <span class="price__now">€49,00</span>
+                </p>
+                <button class="btn btn-secondary add" type="button" data-name="Kamerupgrade" data-price="49,00">
+                  <span class="btn__label">Toevoegen</span>
+                  <svg class="ico btn__plus" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3.25v11.5M3.25 9h11.5"/></svg>
+                  <svg class="ico btn__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+                </button>
+              </div>
+            </li>
+            <li class="poi">
+              <div class="media media--3x2"><img src="assets/img/late-checkout.jpg" alt="Opgemaakt bed in een rustige hotelkamer" loading="lazy" onerror="this.remove()"><svg class="ico" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9.5" r="1.5"/></svg></div>
+              <p class="poi__name">Late check-out</p>
+              <p class="poi__why">Uitchecken tot 14:00 in plaats van 11:00.</p>
+              <div class="poi__foot">
+                <p class="price" data-normaal="15,00" data-voordeel="12,00">
+                  <span class="badge-off">-20%</span>
+                  <span class="price__was"><s>€15,00</s></span>
+                  <span class="price__now">€12,00</span>
+                </p>
+                <button class="btn btn-secondary add" type="button" data-name="Late check-out" data-price="12,00">
+                  <span class="btn__label">Toevoegen</span>
+                  <svg class="ico btn__plus" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3.25v11.5M3.25 9h11.5"/></svg>
+                  <svg class="ico btn__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+                </button>
+              </div>
+            </li>
+          </ul>
+          <a class="link-text link-text--tight" href="#extras">
+            Meer opties voor op de kamer
+            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </li>
+
+        <!-- ── Blok E: Gemak ───────────────────────────────────────────── -->
+        <!-- Parkeren staat er niet bij: dat zit al gratis in het arrangement.
+             De tweede avond is wél een gat, want er is één diner inbegrepen. -->
+        <li class="pillar reveal" style="--d: 240ms">
+          <div class="pillar__head">
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M9 2.5V8M15 2.5V8"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v4.5"/></svg>
+            </span>
+            <div>
+              <h3>Zodat je er niet meer aan denkt</h3>
+            </div>
+          </div>
+          <p class="pillar__text">Twee dingen die op de dag zelf vaak net niet meer lukken.</p>
+          <ul class="extras">
+            <li class="extra">
+              <div class="extra__body">
+                <p class="extra__title">Laadpunt reserveren</p>
+                <!-- De voorraad hieronder moet uit de daadwerkelijke bezetting
+                     komen. Nooit hardcoden: is er niets schaars, dan vervalt
+                     deze regel. -->
+                <p class="extra__meta">Nog <span data-voorraad="2">2</span> van de 6 laadpunten vrij op je aankomstdag.</p>
+              </div>
+              <div class="extra__foot">
+                <p class="price"><span class="price__now">€7,50</span></p>
+                <button class="btn btn-secondary add" type="button" data-name="Laadpunt reserveren" data-price="7,50">
+                  <span class="btn__label">Toevoegen</span>
+                  <svg class="ico btn__plus" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3.25v11.5M3.25 9h11.5"/></svg>
+                  <svg class="ico btn__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+                </button>
+              </div>
+            </li>
+            <li class="extra">
+              <div class="extra__body">
+                <p class="extra__title">Tafel voor de tweede avond</p>
+                <p class="extra__meta">Je diner is inbegrepen op avond één. Voor dinsdag reserveren we een tafel in het restaurant van Hotel Winselerhof.</p>
+              </div>
+              <div class="extra__foot">
+                <p class="price"><span class="price__free">Reserveren is gratis</span></p>
+                <a class="btn btn-secondary" href="#restaurants">
+                  Tafel kiezen
+                  <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </li>
+          </ul>
+          <a class="link-text link-text--tight" href="#gemak">
+            Meer opties om vooraf te regelen
+            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </li>
+
+      </ul>
+
+      <p class="note-ref">De doorgestreepte prijs is de normale prijs bij ViaLuxury. Die geldt weer zodra je voordeel is afgelopen; extra&#39;s blijven daarna gewoon bij te boeken.</p>
+      <p class="sr-only" id="cart-status" role="status" aria-live="polite"></p>
+
+    </div>
+  </section>
+
+  <!-- ══ Voor je aankomst ════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container"><div class="doc">
+      <article class="card reveal" aria-labelledby="arrival-title">
+        <h2 id="arrival-title" class="card__title">Voor je aankomst</h2>
+
+        <ul class="rows rows--start">
+          <li>
+            <span class="badge">
+              <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <div>
+              <p class="rows__title">Hotel Winselerhof</p>
+              <p class="rows__meta">Daalhemerweg 32, 6301 BJ Valkenburg aan de Geul</p>
+              <a class="link-text link-text--tight" href="https://www.google.com/maps/dir/?api=1&amp;destination=Daalhemerweg+32%2C+6301+BJ+Valkenburg+aan+de+Geul" target="_blank" rel="noopener">
+                Route plannen
+                <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </li>
+        </ul>
+
+        <div class="panels">
+          <div class="panel">
+            <h3>Toevoegen aan agenda</h3>
+            <p>Zet je verblijf in één klik in je eigen agenda, inclusief adres en boekingsnummer.</p>
+            <button class="link-text link-text--tight" type="button" id="ics-button">
+              <svg class="ico" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.75 2.75v-2M12.25 2.75v-2"/><rect x="2.25" y="2.75" width="13.5" height="12.5" rx="2" ry="2"/><path d="M2.25 6.25h13.5"/></svg>
+              Voeg je verblijf toe
+            </button>
+          </div>
+          <div class="panel">
+            <h3>Wensen doorgeven</h3>
+            <p>Laat ons weten wat je nodig hebt: dieetwensen, bedtype, aankomsttijd of speciale gelegenheden.</p>
+          </div>
+        </div>
+
+        <div class="block" id="contact">
+          <h3>Wijzigen of annuleren</h3>
+          <p>Voor vragen over je boeking kun je ons bereiken via ViaLuxury.</p>
+          <ul class="rows">
+            <li>
+              <span class="badge">
+                <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M6 3h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg>
+              </span>
+              <div>
+                <p class="rows__title"><a href="tel:+31881234567">088 123 4567</a></p>
+                <p class="rows__meta">Telefonisch bereikbaar op ma–vr, 09:00–17:00</p>
+              </div>
+            </li>
+            <li>
+              <span class="badge">
+                <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 4h16v12H8l-4 4z"/></svg>
+              </span>
+              <div>
+                <p class="rows__title"><a href="https://wa.me/31612345678" target="_blank" rel="noopener">WhatsApp 06 1234 5678</a></p>
+                <p class="rows__meta">Direct antwoord</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <h3>Annuleringsvoorwaarden</h3>
+          <p>Je kunt je boeking kosteloos annuleren tot 48 uur voor aankomst.</p>
+          <a class="link-text link-text--tight" href="#voorwaarden">Bekijk volledige voorwaarden</a>
+        </div>
+      </article>
+    </div></div>
+  </section>
+
+</main>
+
+<!-- ══ Delen ═════════════════════════════════════════════════════════════ -->
+<section class="cta" aria-labelledby="share-title">
+  <div class="container"><div class="doc">
+    <div class="cta__head reveal">
+      <p class="section-kicker">Delen &amp; terugkeer</p>
+      <h2 id="share-title" class="cta__title">Neem je medereiziger mee</h2>
+      <p class="cta__sub">Stuur de volledige boekingsdetails door, dan heeft iedereen dezelfde informatie bij de hand.</p>
+    </div>
+
+    <div class="cta__card reveal" id="share-card" style="--d: 150ms">
+      <h3 class="cta__card-title">Details doorsturen</h3>
+      <p class="cta__card-sub">Je medereiziger ontvangt dezelfde bevestiging als jij.</p>
+
+      <form class="form" id="share-form" novalidate>
+        <div class="form__field" id="share-field">
+          <label for="share-email">Emailadres van je medereiziger</label>
+          <input id="share-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="naam@voorbeeld.nl" required>
+          <span class="form__error" id="share-error">Vul een geldig e-mailadres in.</span>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">
+          Verstuur
+          <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="form__note">We gebruiken dit adres alleen om deze boeking te delen.</p>
+      </form>
+
+      <div class="form__success" id="share-success">
+        <div class="form__success-icon">
+          <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+        </div>
+        <p class="form__success-title">Verstuurd</p>
+        <p class="form__success-text">De boekingsdetails zijn onderweg naar <strong id="share-target"></strong>.</p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ══ Footer ════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <p class="footer__logo">ViaLuxury</p>
+      <p>Boekingsnummer 98754123</p>
+      <p><a href="#voorwaarden">Algemene voorwaarden</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Meeloopklok op mobiel. Komt pas in beeld zodra de upsellsectie in beeld
+     is, niet eerder. Aria-hidden: de klok in de sectie doet de aankondiging al. -->
+<div class="sticky-timer" id="sticky-timer" aria-hidden="true">
+  <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 15"/></svg>
+  <span id="sticky-timer-value">--:--:--</span>
+  <span>voordeel op extra&#39;s</span>
+</div>
+
+<script>
+/* ViaLuxury — boekingsbevestiging: reveal, aftelklok, upsells, agenda, delen. */
+(function () {
+  'use strict';
+
+  /* ── Scroll reveal (§9.2) ─────────────────────────────────────────────── */
+  var reveals = document.querySelectorAll('.reveal');
+  var toonAlles = function () {
+    reveals.forEach(function (el) { el.classList.add('is-visible'); });
+  };
+
+  if (!('IntersectionObserver' in window)) {
+    toonAlles();
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(function (el) { observer.observe(el); });
+
+    /* Vangnet. Dit is een bevestigingspagina: als de observer om welke reden
+       dan ook niet afgaat (ingebedde weergave, printvoorbeeld, e-mailclient),
+       mag de inhoud niet onzichtbaar blijven. Vuurt alleen als er na 1,2s nog
+       niets onthuld is, dus bij normaal gebruik verandert er niets. */
+    setTimeout(function () {
+      if (!document.querySelector('.reveal.is-visible')) { toonAlles(); }
+    }, 1200);
+  }
+
+  /* ── Boekingsgegevens ─────────────────────────────────────────────────── */
+  /* Eén bron van waarheid: de data-attributen op de upsellsectie. Die worden
+     door de backend uit de boeking gerenderd. Niets hieronder verzint zelf een
+     datum, een prijs of een voorraad. */
+  var upsell = document.getElementById('upsell');
+  var hotel = upsell ? upsell.dataset.hotel : '';
+
+  /* De eerste rij uit de HTML is het sjabloon voor de pijler Genot. Hij wordt
+     hier gekloond, vóór de aftelklok hieronder de prijzen kan terugzetten:
+     anders zou een verlopen voordeel het sjabloon zelf uitkleden en zou elke
+     nieuwe rij zonder prijsblok worden opgebouwd. */
+  var genotLijst = document.getElementById('genot-lijst');
+  var extraSjabloon = genotLijst && genotLijst.querySelector('.poi')
+    ? genotLijst.querySelector('.poi').cloneNode(true)
+    : null;
+  var nu = function () { return new Date(); };
+  var fmtDag  = new Intl.DateTimeFormat('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
+  var fmtTijd = new Intl.DateTimeFormat('nl-NL', { hour: '2-digit', minute: '2-digit' });
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+
+  /* ── Urgentie 3 en de sfeerregel ──────────────────────────────────────── */
+  if (upsell) {
+    var aankomst = new Date(upsell.dataset.aankomst + 'T00:00:00');
+
+    /* Operationele deadline: altijd tonen, ook als het voordeel al verlopen is.
+       Dit is het vangnet bij een tweede of derde bezoek aan de pagina. */
+    var opDeadline = new Date(aankomst.getTime() - 7 * 864e5);
+    var opRegel = document.getElementById('operationele-regel');
+    if (opRegel && opDeadline > nu()) {
+      opRegel.textContent = 'Extra’s bijboeken kan tot ' + fmtDag.format(opDeadline)
+        + '. Daarna kan het hotel het niet meer voorbereiden.';
+      opRegel.hidden = false;
+    }
+
+    /* Nadrukkelijk sfeer en geen urgentie: geen klok, geen kleur, geen actie. */
+    var dagen = Math.ceil((aankomst - nu()) / 864e5);
+    var sfeer = document.getElementById('sfeer-regel');
+    if (sfeer && dagen > 0) {
+      sfeer.textContent = 'Nog ' + dagen + (dagen === 1 ? ' dag' : ' dagen') + ' tot je verblijf in ' + hotel + '.';
+      sfeer.hidden = false;
+    }
+  }
+
+  /* ── Urgentie 1: het voordeel op extra's, 48 uur ──────────────────────── */
+  /* De deadline is een absoluut tijdstip (boekingsmoment + 48 uur) dat uit de
+     boeking komt. Er wordt hier niets in de browser bewaard, dus herladen, een
+     nieuwe sessie of een nieuw bezoek kan hem niet resetten. Loopt hij af
+     terwijl de pagina open staat, dan gaan de prijzen zichtbaar terug naar
+     normaal en verdwijnen de kortingsbadges. */
+  var timer        = document.getElementById('timer');
+  var timerValue   = document.getElementById('timer-value');
+  var voordeelRij  = document.getElementById('voordeel-regel');
+  var voordeelTxt  = document.getElementById('voordeel-tekst');
+  var voordeelDat  = document.getElementById('voordeel-datum');
+  var stickyTimer  = document.getElementById('sticky-timer');
+  var stickyValue  = document.getElementById('sticky-timer-value');
+  var voordeelActief = false;
+
+  /* Zet de prijzen terug naar normaal zodra het voordeel weg is. Draait ook
+     over nieuw ingevoegde rijen, want de pijler Genot wordt herbouwd. */
+  var herprijs = function (root) {
+    if (voordeelActief) { return; }
+    (root || document).querySelectorAll('.price[data-normaal]').forEach(function (prijs) {
+      var badge = prijs.querySelector('.badge-off');
+      var was   = prijs.querySelector('.price__was');
+      if (badge) { badge.remove(); }
+      if (was)   { was.remove(); }
+      prijs.querySelector('.price__now').textContent = '€' + prijs.dataset.normaal;
+      var knop = prijs.parentNode.querySelector('.add');
+      if (knop) { knop.dataset.price = prijs.dataset.normaal; }
+    });
+  };
+
+  if (upsell && timer && timerValue) {
+    var geboekt = new Date(upsell.dataset.geboekt);
+    var uren = parseInt(upsell.dataset.voordeelUren, 10) || 48;
+    var deadline = new Date(geboekt.getTime() + uren * 3600e3);
+    var tick = null;
+
+    var toonVerlopen = function () {
+      voordeelActief = false;
+      if (tick) { clearInterval(tick); }
+      timer.hidden = true;
+      voordeelDat.hidden = true;
+      /* Eerlijk zijn: het voordeel is weg en komt niet terug. Tot wanneer je
+         nog wél kunt bijboeken staat in de operationele regel eronder. */
+      voordeelTxt.textContent = 'Je voordeel op extra’s is verlopen. Bijboeken kan nog tegen de normale prijs.';
+      if (stickyTimer) {
+        stickyTimer.classList.remove('is-on');
+        document.body.classList.remove('has-sticky-timer');
+      }
+      herprijs();
+    };
+
+    var render = function () {
+      var over = deadline - nu();
+      if (over <= 0) { toonVerlopen(); return; }
+      var sec = Math.floor(over / 1000);
+      var u = Math.floor(sec / 3600);
+      var m = Math.floor(sec / 60) % 60;
+      var tekst = pad(u) + ':' + pad(m) + ':' + pad(sec % 60);
+      timerValue.textContent = tekst;
+      if (stickyValue) { stickyValue.textContent = tekst; }
+      timer.setAttribute('aria-label', 'Je voordeel verloopt over ' + u + ' uur en ' + m + ' minuten');
+    };
+
+    voordeelActief = deadline > nu();
+    voordeelRij.hidden = false;
+
+    if (voordeelActief) {
+      voordeelDat.textContent = 'Verloopt op ' + fmtDag.format(deadline) + ' om ' + fmtTijd.format(deadline) + '.';
+      voordeelDat.hidden = false;
+      render();
+      tick = setInterval(render, 1000);
+    } else {
+      toonVerlopen();
+    }
+
+    /* Meeloopklok: alleen zodra de sectie in beeld komt, en alleen zolang er
+       echt iets afloopt. */
+    if (stickyTimer && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var aan = e.isIntersecting && voordeelActief;
+          stickyTimer.classList.toggle('is-on', aan);
+          document.body.classList.toggle('has-sticky-timer', aan);
+        });
+      }, { threshold: 0 }).observe(upsell);
+    }
+  }
+
+  /* ── Blok B: annuleringsverzekering ───────────────────────────────────── */
+  /* Bedragen komen uit de boeking, niet uit de tekst. Zo kan er geen verschil
+     ontstaan tussen wat de kaart zegt en wat er verzekerd wordt. */
+  if (upsell) {
+    var waarde = parseFloat(upsell.dataset.boekingswaarde);
+    if (!isNaN(waarde)) {
+      var bedrag = '€' + waarde.toFixed(2).replace('.', ',');
+      ['verzekering-bedrag', 'verzekering-bedrag-2'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) { el.textContent = bedrag; }
+      });
+    }
+
+    /* Urgentie 2: geen marketingklok maar een polisvoorwaarde. Verzekeraars
+       eisen afsluiten binnen 7 tot 14 dagen na boeking, anders kun je pas
+       verzekeren als je al weet dat het niet doorgaat. Exacte datum tonen. */
+    var vDagen = parseInt(upsell.dataset.verzekeringDagen, 10);
+    var vDeadline = document.getElementById('verzekering-deadline');
+    if (vDeadline && vDagen) {
+      var uiterlijk = new Date(new Date(upsell.dataset.geboekt).getTime() + vDagen * 864e5);
+      vDeadline.textContent = 'Afsluiten kan tot en met ' + fmtDag.format(uiterlijk)
+        + '; daarna staat de polis het niet meer toe.';
+    }
+  }
+
+  /* Staat leeg bij het laden en blijft leeg tot de gast zelf aanvinkt: onder
+     de IDD mag een verzekering niet voorgevinkt staan. Uitvinken kan ook, en
+     dat zegt de status dan ook, zodat niemand denkt dat het al vastligt. */
+  var verzStatus = document.getElementById('verzekering-status');
+  document.querySelectorAll('.choice__opt input').forEach(function (input) {
+    input.addEventListener('change', function () {
+      var opt = input.closest('.choice__opt');
+      if (opt) { opt.classList.toggle('is-chosen', input.checked); }
+      if (!verzStatus) { return; }
+      verzStatus.textContent = input.checked
+        ? 'Toegevoegd. Je ontvangt de polis en de verzekeringskaart per e-mail.'
+        : 'Weer verwijderd. Je boeking blijft daarmee niet restitueerbaar.';
+    });
+  });
+
+  /* ── De gelegenheid stuurt de suggesties op de kamer ──────────────────── */
+  var genotKop   = document.getElementById('genot-kop');
+  var genotIntro = document.getElementById('genot-intro');
+
+  var NEUTRAAL = {
+    kop: 'Maak het bijzonder',
+    intro: 'Drie extra’s die we voor je klaarzetten op de kamer.',
+    items: [
+      { titel: 'Fles wijn of bubbels op de kamer', tekst: 'Koud klaargezet voor je aankomst.', normaal: '39,00', voordeel: '29,25', beeld: 'drankpakket.jpg', alt: 'Fles bubbels in een ijsemmer met twee glazen' },
+      { titel: 'Kamerupgrade', tekst: 'Naar een suite in de historische hoeve, als er een vrij is.', normaal: '65,00', voordeel: '49,00' },
+      { titel: 'Late check-out', tekst: 'Uitchecken tot 14:00 in plaats van 11:00.', normaal: '15,00', voordeel: '12,00', beeld: 'late-checkout.jpg', alt: 'Opgemaakt bed in een rustige hotelkamer' }
+    ]
+  };
+
+  /* Niets uit deze lijsten zit al in het arrangement. Ontbijt, welkomstdrankje,
+     3-gangendiner, parkeren en wellnesstoegang zijn eruit gefilterd. */
+  var GENOT = {
+    verjaardag: {
+      kop: 'Voor de jarige',
+      intro: 'Dit staat klaar voordat jullie de kamer in lopen.',
+      items: [
+        { titel: 'Bloemen op de kamer', tekst: 'Boeket van een bloemist uit Landgraaf.', normaal: '32,50', voordeel: '24,50', beeld: 'bloemen-kamer.jpg', alt: 'Boeket pioenrozen op een donkere houten tafel' },
+        { titel: 'Taart op de kamer', tekst: 'Ambachtelijke taart voor twee, met kaarsje.', normaal: '27,50', voordeel: '22,00', beeld: 'taart-kamer.jpg', alt: 'Punt gelaagde taart op een bord' },
+        { titel: 'Late check-out', tekst: 'Uitchecken tot 14:00 in plaats van 11:00.', normaal: '15,00', voordeel: '12,00', beeld: 'late-checkout.jpg', alt: 'Opgemaakt bed in een rustige hotelkamer' }
+      ]
+    },
+    jubileum: {
+      kop: 'Voor het jubileum',
+      intro: 'Dit maakt er een avond van die je je blijft herinneren.',
+      items: [
+        { titel: 'Fles champagne op de kamer', tekst: 'Op ijs, klaar bij aankomst.', normaal: '59,00', voordeel: '44,50', beeld: 'drankpakket.jpg', alt: 'Fles bubbels in een ijsemmer met twee glazen' },
+        { titel: 'Kamerupgrade', tekst: 'Naar een suite in de historische hoeve, als er een vrij is.', normaal: '65,00', voordeel: '49,00' },
+        { titel: 'Privé sauna-slot', tekst: 'Een uur de wellness voor jullie tweeën, buiten de openingstijden.', normaal: '45,00', voordeel: '35,00', beeld: 'sauna.jpg', alt: 'Warm verlichte sauna' }
+      ]
+    },
+    huwelijksreis: {
+      kop: 'Voor de huwelijksreis',
+      intro: 'Twee dingen die het verblijf apart zetten.',
+      items: [
+        { titel: 'Romantisch pakket', tekst: 'Bloemen, bubbels en handgemaakte bonbons op de kamer.', normaal: '79,00', voordeel: '59,00', beeld: 'diner-wijnarrangement.jpg', alt: 'Gedekte tafel met kaarslicht en wijnglazen' },
+        { titel: 'Ontbijt op de kamer', tekst: 'Je inbegrepen ontbijt op bed in plaats van in het restaurant.', normaal: '25,00', voordeel: '19,50', beeld: 'ontbijt-kamer.jpg', alt: 'Kop koffie met latte art en een croissant' }
+      ]
+    },
+    neutraal: NEUTRAAL
+  };
+  /* Voor deze twee schrijft de brief geen eigen selectie voor. */
+  GENOT.samen = NEUTRAAL;
+  GENOT.zakelijk = NEUTRAAL;
+
+  var kortingPct = function (normaal, voordeel) {
+    var n = parseFloat(normaal.replace(',', '.'));
+    var v = parseFloat(voordeel.replace(',', '.'));
+    return Math.round((1 - v / n) * 100);
+  };
+
+  var renderGenot = function (sleutel) {
+    if (!genotLijst || !extraSjabloon) { return; }
+    var set = GENOT[sleutel] || NEUTRAAL;
+    genotKop.textContent = set.kop;
+    genotIntro.textContent = set.intro;
+    genotLijst.textContent = '';
+
+    set.items.forEach(function (item) {
+      var li = extraSjabloon.cloneNode(true);
+      li.querySelector('.poi__name').textContent = item.titel;
+      li.querySelector('.poi__why').textContent = item.tekst;
+
+      /* Is er geen foto van deze extra, dan blijft de beeldplek staan met het
+         icoon erin. Dat leest als een plek waar een foto komt; een weggelaten
+         beeld zou de kaarten in de rij ongelijk hoog maken. */
+      var media = li.querySelector('.media');
+      var img = media.querySelector('img');
+      if (item.beeld) {
+        img.src = 'assets/img/' + item.beeld;
+        img.alt = item.alt;
+        media.classList.remove('media--leeg');
+      } else {
+        img.remove();
+        media.classList.add('media--leeg');
+      }
+
+      var prijs = li.querySelector('.price');
+      prijs.dataset.normaal = item.normaal;
+      prijs.dataset.voordeel = item.voordeel;
+      prijs.querySelector('.price__now').textContent = '€' + item.voordeel;
+      /* Deze twee staan er alleen zolang het voordeel loopt; herprijs() haalt
+         ze hieronder weg zodra dat niet meer zo is. */
+      var badge = prijs.querySelector('.badge-off');
+      var was = prijs.querySelector('.price__was s');
+      if (badge) { badge.textContent = '-' + kortingPct(item.normaal, item.voordeel) + '%'; }
+      if (was) { was.textContent = '€' + item.normaal; }
+
+      var knop = li.querySelector('.add');
+      knop.dataset.name = item.titel;
+      knop.dataset.price = item.voordeel;
+      knop.classList.remove('is-added');
+      knop.setAttribute('aria-pressed', 'false');
+      knop.querySelector('.btn__label').textContent = 'Toevoegen';
+
+      genotLijst.appendChild(li);
+    });
+
+    herprijs(genotLijst);
+  };
+
+  /* De gelegenheid komt uit de boeking of het klantprofiel, niet uit een vraag
+     op deze pagina. Wie net heeft afgerekend wil geen formulier meer. Is het
+     veld leeg of onbekend, dan blijft de neutrale selectie staan die al in de
+     HTML staat; er flikkert dan niets. */
+  var gelegenheid = upsell ? upsell.dataset.gelegenheid : '';
+  if (gelegenheid && GENOT[gelegenheid]) { renderGenot(gelegenheid); }
+
+  /* ── Extra's toevoegen en verwijderen ─────────────────────────────────── */
+  /* Gedelegeerd, want de rijen in de pijler Genot worden opnieuw opgebouwd. */
+  var status = document.getElementById('cart-status');
+
+  document.querySelectorAll('.add').forEach(function (btn) {
+    btn.setAttribute('aria-pressed', 'false');
+  });
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.add') : null;
+    if (!btn) { return; }
+
+    var label = btn.querySelector('.btn__label');
+    var added = btn.classList.toggle('is-added');
+    btn.setAttribute('aria-pressed', String(added));
+    if (label) { label.textContent = added ? 'Toegevoegd' : 'Toevoegen'; }
+
+    if (status) {
+      status.textContent = added
+        ? btn.dataset.name + ' toegevoegd aan je boeking voor €' + btn.dataset.price + '.'
+        : btn.dataset.name + ' verwijderd uit je boeking.';
+    }
+  });
+
+  /* Prijzen meteen goedzetten als het voordeel bij het laden al voorbij was. */
+  herprijs();
+
+  /* ── Verblijf in de agenda (.ics) ─────────────────────────────────────── */
+  var icsButton = document.getElementById('ics-button');
+
+  if (icsButton) {
+    icsButton.addEventListener('click', function () {
+      var ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//ViaLuxury//Boeking//NL',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VEVENT',
+        'UID:98754123@vialuxury.com',
+        'DTSTART;VALUE=DATE:20251229',
+        'DTEND;VALUE=DATE:20251231',
+        'SUMMARY:Verblijf Hotel Winselerhof',
+        'LOCATION:Daalhemerweg 32\\, 6301 BJ Valkenburg aan de Geul',
+        'DESCRIPTION:Boekingsnummer 98754123. Check-in vanaf 15:00\\, check-out vóór 11:00.',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+
+      var url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'verblijf-hotel-winselerhof.ics';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    });
+  }
+
+  /* ── Details delen (§6.15 success state) ──────────────────────────────── */
+  var form = document.getElementById('share-form');
+
+  if (form) {
+    var card = document.getElementById('share-card');
+    var field = document.getElementById('share-field');
+    var input = document.getElementById('share-email');
+    var success = document.getElementById('share-success');
+    var target = document.getElementById('share-target');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!input.checkValidity() || !input.value.trim()) {
+        field.classList.add('has-error');
+        input.focus();
+        return;
+      }
+
+      field.classList.remove('has-error');
+      target.textContent = input.value.trim();
+      form.classList.add('is-hidden');
+      success.classList.add('is-visible');
+      card.classList.add('is-verzonden');
+
+      /* Hier komt de echte API-call: POST /api/booking/98754123/share */
+    });
+
+    input.addEventListener('input', function () { field.classList.remove('has-error'); });
+  }
+})();
+</script>
+<!-- ══ Variantschakelaar ══════════════════════════════════════════════════
+     Alleen voor jou tijdens het werken, niet voor productie. Overgenomen van
+     app/components/checkout/VariantSwitcher.vue uit flexibel-annuleren, maar
+     zonder Vue: dit zijn losse bestanden, dus wisselen is navigeren.
+
+     Staat bewust in de pagina en niet in een apart bestand. Een <script src>
+     werkt niet in previews die de pagina als data:-URL laden, en dan zie je
+     het paneel niet.
+
+     Een variant toevoegen: één regel in VARIANTEN. Verschijnt alleen op
+     localhost en via file://. Weghalen: dit hele blok schrappen.
+
+     Sneltoetsen: 1 tot 9 springen naar die variant, v klapt in en uit.
+-->
+<script>
+(function () {
+  'use strict';
+
+  var VARIANTEN = [
+    { bestand: 'index.html',    label: '1 — Eerste versie' },
+    { bestand: 'index-v2.html', label: '2 — CRO-herontwerp' },
+    { bestand: 'index-v3.html', label: '3 — Compact met iconen' }
+  ];
+
+  /* Een dev-tool die per ongeluk meegaat naar productie is erger dan geen
+     dev-tool. Vandaar de poort. */
+  var lokaal = location.protocol === 'file:'
+    || ['localhost', '127.0.0.1', '0.0.0.0', '::1'].indexOf(location.hostname) !== -1
+    || /\.local$/.test(location.hostname);
+  if (!lokaal) { return; }
+
+  var SLEUTEL = 'vl-varianten-open';
+  var huidig = location.pathname.split('/').pop() || 'index.html';
+
+  /* De stijl injecteren in plaats van in de <style> van de pagina zetten, zodat
+     die stylesheet precies de pagina blijft en dit blok in zijn geheel weg kan. */
+  var stijl = document.createElement('style');
+  stijl.textContent = ''
+    + '.vlv{position:fixed;right:20px;bottom:20px;z-index:9999;width:300px;max-width:calc(100vw - 40px);'
+    + 'background:#141414;color:#fff;border-radius:6px;box-shadow:0 8px 32px rgba(0,0,0,.35);'
+    + 'overflow:hidden;font-family:"Basis Grotesque",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;'
+    + 'font-size:15px;line-height:1.4;}'
+    + '.vlv button{font:inherit;color:#fff;background:none;border:0;cursor:pointer;}'
+    + '.vlv__kop{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;'
+    + 'padding:12px 16px;font-weight:700;}'
+    + '.vlv__kop svg{transition:transform .15s ease;flex-shrink:0;}'
+    + '.vlv.is-dicht .vlv__kop svg{transform:rotate(180deg);}'
+    + '.vlv.is-dicht .vlv__lijst{display:none;}'
+    + '.vlv__lijst{display:flex;flex-direction:column;padding:4px;gap:2px;max-height:60vh;overflow-y:auto;}'
+    + '.vlv__item{text-align:left;padding:10px 12px;border-radius:4px;transition:background .12s ease;'
+    + 'display:flex;align-items:center;justify-content:space-between;gap:8px;}'
+    + '.vlv__item:hover{background:rgba(255,255,255,.1);}'
+    + '.vlv__item.is-aan{background:#FB862C;}'
+    + '.vlv__item.is-weg{color:rgba(255,255,255,.4);}'
+    + '.vlv__item.is-weg:hover{background:rgba(255,255,255,.06);}'
+    + '.vlv__toets{font-size:12px;opacity:.5;font-variant-numeric:tabular-nums;}'
+    + '.vlv__item.is-aan .vlv__toets{opacity:.75;}'
+    + '@media (max-width:600px){.vlv{right:12px;bottom:12px;left:12px;width:auto;}}'
+    + '@media print{.vlv{display:none;}}';
+  document.head.appendChild(stijl);
+
+  /* Op file:// weigeren sommige browsers localStorage en gooit de lezing een
+     fout. Zonder deze vangst valt het hele paneel dan weg. */
+  var onthoud = function (waarde) {
+    try {
+      if (waarde === undefined) { return localStorage.getItem(SLEUTEL); }
+      localStorage.setItem(SLEUTEL, waarde);
+    } catch (e) { /* geen opslag: het paneel start dan gewoon open */ }
+    return null;
+  };
+
+  var open = onthoud() !== 'nee';
+
+  var paneel = document.createElement('div');
+  paneel.className = 'vlv' + (open ? '' : ' is-dicht');
+
+  var kop = document.createElement('button');
+  kop.className = 'vlv__kop';
+  kop.type = 'button';
+  kop.setAttribute('aria-expanded', String(open));
+  kop.innerHTML = '<span>Variant</span>'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">'
+    + '<path d="M6 15l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  var lijst = document.createElement('div');
+  lijst.className = 'vlv__lijst';
+
+  VARIANTEN.forEach(function (v, i) {
+    var aan = v.bestand === huidig;
+    var knop = document.createElement('button');
+    knop.type = 'button';
+    knop.className = 'vlv__item' + (aan ? ' is-aan' : '');
+    knop.dataset.bestand = v.bestand;
+    if (aan) { knop.setAttribute('aria-current', 'page'); }
+
+    var naam = document.createElement('span');
+    naam.textContent = v.label;
+    knop.appendChild(naam);
+
+    if (i < 9) {
+      var toets = document.createElement('span');
+      toets.className = 'vlv__toets';
+      toets.textContent = String(i + 1);
+      knop.appendChild(toets);
+    }
+
+    knop.addEventListener('click', function () {
+      if (v.bestand !== huidig) { location.href = v.bestand; }
+    });
+    lijst.appendChild(knop);
+  });
+
+  paneel.appendChild(kop);
+  paneel.appendChild(lijst);
+  document.body.appendChild(paneel);
+
+  var zetOpen = function (nu) {
+    open = nu;
+    paneel.classList.toggle('is-dicht', !open);
+    kop.setAttribute('aria-expanded', String(open));
+    onthoud(open ? 'ja' : 'nee');
+  };
+  kop.addEventListener('click', function () { zetOpen(!open); });
+
+  /* Bestaat een bestand nog niet, dan grijst die regel uit. Zo kun je de hele
+     testopzet alvast neerzetten zonder dat een klik doodloopt. */
+  if (location.protocol !== 'file:') {
+    VARIANTEN.forEach(function (v) {
+      if (v.bestand === huidig) { return; }
+      fetch(v.bestand, { method: 'HEAD' }).then(function (r) {
+        if (r.ok) { return; }
+        var el = lijst.querySelector('[data-bestand="' + v.bestand + '"]');
+        if (el) { el.classList.add('is-weg'); el.title = 'Dit bestand bestaat nog niet'; }
+      }).catch(function () { /* offline: laat de regel staan zoals hij is */ });
+    });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) { return; }
+    var el = document.activeElement;
+    if (el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable)) { return; }
+
+    if (e.key === 'v') { zetOpen(!open); return; }
+
+    var n = parseInt(e.key, 10);
+    if (n >= 1 && n <= 9 && VARIANTEN[n - 1] && VARIANTEN[n - 1].bestand !== huidig) {
+      location.href = VARIANTEN[n - 1].bestand;
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
