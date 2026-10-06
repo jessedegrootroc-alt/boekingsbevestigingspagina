@@ -41,13 +41,13 @@ Budget: foto's ≈150 kB JPEG, transparant beeld als WebP (`cwebp -q 82 -alpha_q
 De pagina verwacht de huisstijlfonts zelf gehost, zoals in de styleguide:
 
 ```
-public/fonts/recoleta/Recoleta-Regular.ttf
-public/fonts/recoleta/Recoleta-Medium.ttf
-public/fonts/recoleta/Recoleta-SemiBold.ttf
-public/fonts/recoleta/Recoleta-Bold.ttf
-public/fonts/basis-grotesque/basisgrotesque-regular.ttf
-public/fonts/basis-grotesque/basisgrotesque-medium.ttf
-public/fonts/basis-grotesque/basisgrotesque-bold.ttf
+assets/fonts/recoleta/Recoleta-Regular.ttf
+assets/fonts/recoleta/Recoleta-Medium.ttf
+assets/fonts/recoleta/Recoleta-SemiBold.ttf
+assets/fonts/recoleta/Recoleta-Bold.ttf
+assets/fonts/basis-grotesque/basisgrotesque-regular.ttf
+assets/fonts/basis-grotesque/basisgrotesque-medium.ttf
+assets/fonts/basis-grotesque/basisgrotesque-bold.ttf
 ```
 
 Zolang die ontbreken valt de pagina terug op Georgia (kop) en de systeem-sans
